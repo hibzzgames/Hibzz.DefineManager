@@ -1,0 +1,12 @@
+{
+  "name": "com.hibzz.definemanager",
+  "version": "0.1.0",
+  "displayName": "hibzz.definemanager",
+  "description": "A tool used to manage #defines in a project to enable/disable optional features to supporting packages and to produce cleaner and more efficient code",
+  "author": {
+    "name": "Hibzz Games",
+    "email": "support@hibzz.games",
+    "url": "https://hibzz.games/"
+  },
+  "type": "tool"
+}
