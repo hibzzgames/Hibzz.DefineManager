@@ -5,6 +5,9 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
+// TODO: Implement Category
+// TODO: Implement Enable By Default
+
 namespace Hibzz.DefineManager
 {
 	internal static class Manager
@@ -103,12 +106,47 @@ namespace Hibzz.DefineManager
 			// Sort by assembly name then by the display name
 			settings.DefineRegistery.Sort();
 
+			// Perform collapse data refresh
+			RefreshCollapsedCategoryInfo();
+
 			// finally save the refreshed content
 			DefineManagerSettings.SaveSettings();
 		}
 
-		// Returns a list of methods with the attribute "RegisterDefine" in it
-		private static List<MethodInfo> GetMethodsWithRegisterDefines()
+		/// <summary>
+		/// Refresh the collapsed category info
+		/// </summary>
+		private static void RefreshCollapsedCategoryInfo()
+        {
+			var settings = DefineManagerSettings.GetOrCreateSettings();
+			
+			var cacheData = settings.IsCollapsed;
+			settings.IsCollapsed = new Dictionary<string, bool>();
+
+			string lastCategory = string.Empty;
+			foreach(var defineData in settings.DefineRegistery)
+            {
+				// skip if we've already processed the categorry
+				if(defineData.Category == lastCategory) { continue; }
+
+				// if we already have info on whether the category was
+				// collapsed or not, we use it during the refresh
+				bool collapsed = false;
+				if(cacheData.ContainsKey(defineData.Category))
+                {
+					collapsed = cacheData[defineData.Category];
+                }
+
+				// store the info to the new category info inside settings
+				settings.IsCollapsed[defineData.Category] = collapsed;
+
+				// update the last category flag
+				lastCategory = defineData.Category;
+			}
+        }
+
+        // Returns a list of methods with the attribute "RegisterDefine" in it
+        private static List<MethodInfo> GetMethodsWithRegisterDefines()
 		{
 			// variable that will store a list of methods with the RegisterDefine attribute in it
 			List<MethodInfo> methods = new List<MethodInfo>();

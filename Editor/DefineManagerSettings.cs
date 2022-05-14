@@ -14,6 +14,8 @@ namespace Hibzz.DefineManager
 		[SerializeField] internal List<DefineRegistrationData> DefineRegistery;
 		[SerializeField] internal List<string> IgnoreAssemblyList;
 
+		internal Dictionary<string, bool> IsCollapsed;
+
 		/// <summary>
 		/// Constructor
 		/// </summary>
@@ -21,6 +23,7 @@ namespace Hibzz.DefineManager
         {
 			DefineRegistery = new List<DefineRegistrationData>();
 			IgnoreAssemblyList = new List<string>();
+			IsCollapsed = new Dictionary<string, bool>();
         }
 
 		/// <summary>

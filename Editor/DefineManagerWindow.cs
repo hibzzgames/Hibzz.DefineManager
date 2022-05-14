@@ -26,7 +26,7 @@ namespace Hibzz.DefineManager
 			#endif
 		}
 
-#if !ENABLE_DEFINE_MANAGER
+		#if !ENABLE_DEFINE_MANAGER
 		private readonly Vector2 InitializeButtonSize = new Vector2(200.0f, 50.0f);
 		
 		private void DrawUnitialized()
@@ -72,49 +72,100 @@ namespace Hibzz.DefineManager
 			HandleRepaint();
 		}
 
-		
 		private Vector2 scrollpos;
 		private float DefineListPaneWidth = 300.0f;
 		private void DrawLeftTab(DefineManagerSettings settings)
 		{
 			scrollpos = GUILayout.BeginScrollView(scrollpos, EditorStyleUtility.LeftTabStyle,
 							GUILayout.Height(position.height), GUILayout.Width(DefineListPaneWidth));
-
-			foreach (var defineData in settings.DefineRegistery)
-			{
-				// Style based GUILayout.BeginHorizontal()
-				if (defineData == selectedData)
+            {
+				// variable used to track the last drawn category...
+				// This works because the system passes in define data sorted
+				// by category
+				string lastCategory = string.Empty;
+				foreach (var defineData in settings.DefineRegistery)
 				{
-					GUILayout.BeginHorizontal(EditorStyleUtility.LeftTabSelectedStyle);
+					bool isCollapsed = settings.IsCollapsed[defineData.Category];
+
+					if (defineData.Category != lastCategory)
+					{
+						// Draw Category
+						DrawCategoryElement(defineData, isCollapsed);
+						lastCategory = defineData.Category;
+					}
+
+					// don't draw the define elements if the category is collapsed
+					if(isCollapsed) { continue; }
+
+					DrawDefineElement(defineData);
 				}
-				else
-                {
-					GUILayout.BeginHorizontal();
-				}
-				
+
+				AddRefreshButton();
+			}
+			GUILayout.EndScrollView();
+		}
+
+		// draw category element on the left
+		private void DrawCategoryElement(DefineRegistrationData data, bool isCollapsed)
+		{
+			GUILayout.BeginHorizontal(EditorStyleUtility.CategoryElementStyle);
+			{
+				GUIContent foldoutIcon = isCollapsed ?
+					EditorGUIUtility.IconContent("IN foldout") :
+					EditorGUIUtility.IconContent("IN foldout on");
+
+				GUILayout.Label(foldoutIcon, GUILayout.Width(18), GUILayout.Height(18));
+				GUILayout.Label(data.Category, EditorStyleUtility.CategoryFontStyle);
+			}
+			GUILayout.EndHorizontal();
+
+			// Check for a mouse click
+			if (Event.current.type == EventType.MouseDown &&
+				GUILayoutUtility.GetLastRect().Contains(Event.current.mousePosition))
+			{
+				// toggle the collapsed data info for that category
+				var settings = DefineManagerSettings.GetOrCreateSettings();
+				settings.IsCollapsed[data.Category] = !settings.IsCollapsed[data.Category];
+
+				requestRepaint = true;	
+			}
+		}
+
+		// draw define element
+		private void DrawDefineElement(DefineRegistrationData defineData)
+		{
+			GUIStyle style = CheckSelectedAndGetStyle(defineData);
+			GUILayout.BeginHorizontal(style);
+			{
 				GUILayout.Label($"{defineData.DisplayName}");
-				if(defineData.IsInstalled)
+				if (defineData.IsInstalled)
 				{
 					GUILayout.FlexibleSpace();
 					GUILayout.Label(EditorGUIUtility.IconContent("FilterSelectedOnly"));
 				}
-				GUILayout.EndHorizontal();
-
-				// don't need to check for click if already selected
-				if(selectedData == defineData) { continue; }
-
-				if(Event.current.type == EventType.MouseDown && 
-					GUILayoutUtility.GetLastRect().Contains(Event.current.mousePosition))
-				{
-					selectedData = defineData;
-					requestRepaint = true;
-				}
 			}
+			GUILayout.EndHorizontal();
 
-			AddRefreshButton();
-			GUILayout.EndScrollView();
+			// don't need to check for click if already selected
+			if (selectedData == defineData) { return; }
+
+			// Check for a mouse click
+			if (Event.current.type == EventType.MouseDown &&
+				GUILayoutUtility.GetLastRect().Contains(Event.current.mousePosition))
+			{
+				selectedData = defineData;
+				requestRepaint = true;
+			}
 		}
 
+		// Check if the passed in data is the selected one, and pass the appropriate data
+		private GUIStyle CheckSelectedAndGetStyle(DefineRegistrationData defineData)
+		{
+			if (defineData == selectedData) { return EditorStyleUtility.LeftTabSelectedStyle; }
+			return GUIStyle.none;
+		}
+
+		// Draw the right pane
 		private void DrawRightTab()
 		{
 			// don't do anything if none of the elements are selected
@@ -127,11 +178,12 @@ namespace Hibzz.DefineManager
 			GUILayout.EndVertical();
 		}
 
+		// Add a refresh button
 		void AddRefreshButton()
 		{
 			// Configure the button that can be clicked to refresh the define list
 			GUILayout.FlexibleSpace();
-			if (GUILayout.Button("Refresh", GUILayout.Width(DefineListPaneWidth - 24), GUILayout.Height(30)))
+			if (GUILayout.Button("Refresh", GUILayout.Width(DefineListPaneWidth - 16), GUILayout.Height(30)))
 			{
 				// after the refresh, the most valid data exists in the DefineRegistery
 				Manager.RefreshList();
@@ -170,13 +222,14 @@ namespace Hibzz.DefineManager
 			GUILayout.EndHorizontal();
 		}
 
+		// Check and handle repaint request
 		void HandleRepaint()
-        {
+		{
 			if(requestRepaint)
-            {
+			{
 				Repaint();
-            }
-        }
+			}
+		}
 		#endif
 	}
 }
