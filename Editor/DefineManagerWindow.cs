@@ -216,8 +216,7 @@ namespace Hibzz.DefineManager
 			GUILayout.FlexibleSpace();
 
             {
-				// NOTE: In the future can be improved so that this check is only
-				// done once when we switch defines in the left tab
+				// pick the text based on if the data is installed or not
 				string buttonText = registrationData.IsInstalled ? "Remove" : "Install";
 
 				if (GUILayout.Button(buttonText, GUILayout.Width(installButtonSize)))
@@ -235,6 +234,7 @@ namespace Hibzz.DefineManager
 					}
 				}
 
+				// padding space
 				GUILayout.Space(30);
 			}
 
