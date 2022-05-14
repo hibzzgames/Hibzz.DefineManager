@@ -85,7 +85,8 @@ namespace Hibzz.DefineManager
 				string lastCategory = string.Empty;
 				foreach (var defineData in settings.DefineRegistery)
 				{
-					bool isCollapsed = settings.IsCollapsed[defineData.Category];
+					// Get is the data collapsed
+					bool isCollapsed = settings.CollapseInfo.IsCollapsed(defineData.Category);
 
 					if (defineData.Category != lastCategory)
 					{
@@ -125,7 +126,7 @@ namespace Hibzz.DefineManager
 			{
 				// toggle the collapsed data info for that category
 				var settings = DefineManagerSettings.GetOrCreateSettings();
-				settings.IsCollapsed[data.Category] = !settings.IsCollapsed[data.Category];
+				settings.CollapseInfo.Toggle(data.Category);
 
 				requestRepaint = true;	
 			}
@@ -173,13 +174,20 @@ namespace Hibzz.DefineManager
 
 			GUILayout.BeginVertical(EditorStyleUtility.RightTabStyle);
             {
+				// Title + Define data
 				GUILayout.Label($"{selectedData.DisplayName}", EditorStyleUtility.TitleStyle);
 				GUILayout.Label($"Scripting Define: {selectedData.Define}");
+				
+				// Seperator line
 				GUILayout.Space(10);
 				GUILayout.Box("", GUILayout.Width(position.width - DefineListPaneWidth), GUILayout.Height(2));
 				GUILayout.Space(10);
+				
+				// Description
 				GUILayout.Label($"{selectedData.Description}", EditorStyles.wordWrappedLabel, 
 					GUILayout.Width(position.width - DefineListPaneWidth - 20));
+				
+				// Install button
 				AddInstallButton(selectedData);
 			}
 			GUILayout.EndVertical();
@@ -207,23 +215,27 @@ namespace Hibzz.DefineManager
 			GUILayout.BeginHorizontal();
 			GUILayout.FlexibleSpace();
 
-			// NOTE: In the future can be improved so that this check is only
-			// done once when we switch defines in the left tab
-			string buttonText = registrationData.IsInstalled ? "Remove" : "Install";
+            {
+				// NOTE: In the future can be improved so that this check is only
+				// done once when we switch defines in the left tab
+				string buttonText = registrationData.IsInstalled ? "Remove" : "Install";
 
-			if (GUILayout.Button(buttonText, GUILayout.Width(installButtonSize)))
-			{
-				// Add/Remove the requested define
-				if (registrationData.IsInstalled) 
-				{ 
-					Manager.RemoveDefine(registrationData.Define);
-					registrationData.IsInstalled = false;
+				if (GUILayout.Button(buttonText, GUILayout.Width(installButtonSize)))
+				{
+					// Add/Remove the requested define
+					if (registrationData.IsInstalled)
+					{
+						Manager.RemoveDefine(registrationData.Define);
+						registrationData.IsInstalled = false;
+					}
+					else
+					{
+						Manager.AddDefine(registrationData.Define);
+						registrationData.IsInstalled = true;
+					}
 				}
-				else 
-				{ 
-					Manager.AddDefine(registrationData.Define);
-					registrationData.IsInstalled = true;
-				}
+
+				GUILayout.Space(30);
 			}
 
 			GUILayout.EndHorizontal();

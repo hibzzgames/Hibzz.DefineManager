@@ -14,7 +14,7 @@ namespace Hibzz.DefineManager
 		[SerializeField] internal List<DefineRegistrationData> DefineRegistery;
 		[SerializeField] internal List<string> IgnoreAssemblyList;
 
-		internal Dictionary<string, bool> IsCollapsed;
+		internal CategoryCollapseInfo CollapseInfo;
 
 		/// <summary>
 		/// Constructor
@@ -23,7 +23,7 @@ namespace Hibzz.DefineManager
         {
 			DefineRegistery = new List<DefineRegistrationData>();
 			IgnoreAssemblyList = new List<string>();
-			IsCollapsed = new Dictionary<string, bool>();
+			CollapseInfo = new CategoryCollapseInfo();
         }
 
 		/// <summary>
@@ -61,5 +61,43 @@ namespace Hibzz.DefineManager
 			string json = JsonUtility.ToJson(Instance);
 			File.WriteAllText(defineSettingsPath, json);
 		}
+	}
+
+	internal class CategoryCollapseInfo
+    {
+		// data structure to store the category collapsed info
+		internal Dictionary<string, bool> collapseData;
+
+		// constructor
+		internal CategoryCollapseInfo()
+        {
+			collapseData = new Dictionary<string, bool>();
+        }
+
+		/// <summary>
+		/// Is the requested category collapsed or not?
+		/// </summary>
+		internal bool IsCollapsed(string category)
+        {
+			// return the collapse data if it's available
+			if(collapseData.ContainsKey(category))
+            {
+				return collapseData[category];
+            }
+
+			// else by default, it's false
+			return false;
+        }
+
+		/// <summary>
+		/// Toggle the collapse status of the requested category
+		/// </summary>
+		internal void Toggle(string category)
+        {
+			if(collapseData.ContainsKey(category))
+            {
+				collapseData[category] = !collapseData[category];
+            }
+        }
 	}
 }

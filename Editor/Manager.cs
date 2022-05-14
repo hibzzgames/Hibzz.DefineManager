@@ -5,8 +5,6 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-// TODO: Implement Enable By Default
-
 namespace Hibzz.DefineManager
 {
 	internal static class Manager
@@ -98,6 +96,9 @@ namespace Hibzz.DefineManager
 					continue;
 				}
 
+				// check if the data is initialized, if not initialize it
+				if(!data.Initialized) { data.Initialize(); }
+
 				// add to dictionary
 				settings.DefineRegistery.Add(data);
 			}
@@ -119,8 +120,8 @@ namespace Hibzz.DefineManager
         {
 			var settings = DefineManagerSettings.GetOrCreateSettings();
 			
-			var cacheData = settings.IsCollapsed;
-			settings.IsCollapsed = new Dictionary<string, bool>();
+			var cacheData = settings.CollapseInfo.collapseData;
+			settings.CollapseInfo.collapseData = new Dictionary<string, bool>();
 
 			string lastCategory = string.Empty;
 			foreach(var defineData in settings.DefineRegistery)
@@ -137,7 +138,7 @@ namespace Hibzz.DefineManager
                 }
 
 				// store the info to the new category info inside settings
-				settings.IsCollapsed[defineData.Category] = collapsed;
+				settings.CollapseInfo.collapseData[defineData.Category] = collapsed;
 
 				// update the last category flag
 				lastCategory = defineData.Category;

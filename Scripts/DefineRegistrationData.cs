@@ -18,6 +18,8 @@ namespace Hibzz.DefineManager
 
 		#endregion
 
+		[SerializeField] internal bool Initialized = false;
+
 		private bool? _isInstalled = null;
 		/// <summary>
 		/// Is the registered data installed?
@@ -46,5 +48,23 @@ namespace Hibzz.DefineManager
 
 			return Category.CompareTo(other.Category);
 		}
+
+		/// <summary>
+		/// Initialize the data
+		/// </summary>
+		internal void Initialize()
+        {
+			// if already initialize, skip the process
+			if(Initialized) { return; }
+
+			// If asked to enable by default, the define gets automatically added
+			if(EnableByDefault) 
+			{
+				Manager.AddDefine(Define);
+			}
+
+			// mark the data as initialized
+			Initialized = true;
+        }
 	}
 }
