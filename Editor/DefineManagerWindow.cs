@@ -172,9 +172,16 @@ namespace Hibzz.DefineManager
 			if(selectedData == null) { return; }
 
 			GUILayout.BeginVertical(EditorStyleUtility.RightTabStyle);
-			GUILayout.Label($"{selectedData.DisplayName}");
-			GUILayout.Label($"Preprocess Directive: {selectedData.Define}");
-			AddInstallButton(selectedData);
+            {
+				GUILayout.Label($"{selectedData.DisplayName}", EditorStyleUtility.TitleStyle);
+				GUILayout.Label($"Scripting Define: {selectedData.Define}");
+				GUILayout.Space(10);
+				GUILayout.Box("", GUILayout.Width(position.width - DefineListPaneWidth), GUILayout.Height(2));
+				GUILayout.Space(10);
+				GUILayout.Label($"{selectedData.Description}", EditorStyles.wordWrappedLabel, 
+					GUILayout.Width(position.width - DefineListPaneWidth - 20));
+				AddInstallButton(selectedData);
+			}
 			GUILayout.EndVertical();
 		}
 

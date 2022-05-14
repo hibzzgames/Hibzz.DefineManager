@@ -113,17 +113,19 @@ namespace Hibzz.DefineManager
             }
         }
 
-		private static GUIStyle _CategoryArrowStyle;
-		internal static GUIStyle CategoryArrowStyle
+		private static GUIStyle _TitleStyle;
+		internal static GUIStyle TitleStyle
         {
 			get
             {
-				if(_CategoryArrowStyle == null)
+				if(_TitleStyle == null)
                 {
-					_CategoryArrowStyle = new GUIStyle(GUI.skin.label);
+					_TitleStyle = new GUIStyle(GUI.skin.label);
+					_TitleStyle.fontSize = 24;
+					_TitleStyle.fontStyle = FontStyle.Bold;
                 }
 
-				return _CategoryArrowStyle;
+				return _TitleStyle;
             }
         }
 	}

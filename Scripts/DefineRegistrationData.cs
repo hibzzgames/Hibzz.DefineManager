@@ -12,8 +12,9 @@ namespace Hibzz.DefineManager
 
 		public string Define;
 		public string DisplayName;
-		public bool   EnableByDefault;
 		public string Category;
+		public string Description;
+		public bool   EnableByDefault;
 
 		#endregion
 

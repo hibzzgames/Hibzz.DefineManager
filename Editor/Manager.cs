@@ -5,7 +5,6 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-// TODO: Implement Category
 // TODO: Implement Enable By Default
 
 namespace Hibzz.DefineManager
