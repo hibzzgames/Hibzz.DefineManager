@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 namespace Hibzz.DefineManager
 {
 	internal static class Manager
@@ -233,3 +234,4 @@ namespace Hibzz.DefineManager
 		}
 	}
 }
+#endif

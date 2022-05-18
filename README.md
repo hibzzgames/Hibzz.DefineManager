@@ -1,4 +1,7 @@
-# com.hibzz.definemanager
+# Hibzz DefineManager
+
+![npm](https://img.shields.io/npm/dt/com.hibzz.definemanager?style=for-the-badge) [![Twitter Follow](https://img.shields.io/twitter/follow/hibzzgames?color=1a8cd8&style=for-the-badge)](https://twitter.com/hibzzgames) [![Discord](https://img.shields.io/discord/695898694083412048?color=788bd9&label=DIscord&style=for-the-badge)](https://discord.gg/tZdZFK7) ![Unity](https://img.shields.io/badge/unity-%23000000.svg?style=for-the-badge&logo=unity&logoColor=white) ![C#](https://img.shields.io/badge/c%23-%23239120.svg?style=for-the-badge&logo=c-sharp&logoColor=white)
+
  A tool used to manage #defines in a project to enable/disable optional features in supported packages and to produce cleaner and more efficient code. It looks and feels close to Unity's package manager, making the tool easy for the users to pick up and use.
  
  ### Installation

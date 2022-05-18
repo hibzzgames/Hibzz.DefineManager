@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine; 
 using UnityEditor;
 
+#if UNITY_EDITOR
 namespace Hibzz.DefineManager
 {
     internal class Establisher
@@ -18,3 +19,4 @@ namespace Hibzz.DefineManager
 		}
     }
 }
+#endif

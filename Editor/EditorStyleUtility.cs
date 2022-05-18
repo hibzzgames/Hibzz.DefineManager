@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+#if UNITY_EDITOR
 namespace Hibzz.DefineManager
 {
 	internal static class EditorStyleUtility
@@ -130,3 +131,4 @@ namespace Hibzz.DefineManager
         }
 	}
 }
+#endif
