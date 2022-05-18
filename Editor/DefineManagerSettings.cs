@@ -4,6 +4,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 namespace Hibzz.DefineManager
 {
 	[System.Serializable]
@@ -101,3 +102,4 @@ namespace Hibzz.DefineManager
         }
 	}
 }
+#endif

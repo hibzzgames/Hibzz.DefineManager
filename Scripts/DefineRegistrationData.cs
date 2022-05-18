@@ -20,6 +20,7 @@ namespace Hibzz.DefineManager
 
 		[SerializeField] internal bool Initialized = false;
 
+		#if UNITY_EDITOR
 		private bool? _isInstalled = null;
 		/// <summary>
 		/// Is the registered data installed?
@@ -35,6 +36,7 @@ namespace Hibzz.DefineManager
 
 			set { _isInstalled = value; }
 		}
+		#endif
 
 		/// <summary>
 		/// Function used to compare two registration data
@@ -49,6 +51,7 @@ namespace Hibzz.DefineManager
 			return Category.CompareTo(other.Category);
 		}
 
+		#if UNITY_EDITOR
 		/// <summary>
 		/// Initialize the data
 		/// </summary>
@@ -66,5 +69,6 @@ namespace Hibzz.DefineManager
 			// mark the data as initialized
 			Initialized = true;
         }
+		#endif
 	}
 }

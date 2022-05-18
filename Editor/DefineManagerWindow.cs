@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 
+#if UNITY_EDITOR
 namespace Hibzz.DefineManager
 {
 	internal class DefineManagerWindow : EditorWindow
@@ -252,3 +253,4 @@ namespace Hibzz.DefineManager
 		#endif
 	}
 }
+#endif
