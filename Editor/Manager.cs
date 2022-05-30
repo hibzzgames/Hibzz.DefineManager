@@ -83,9 +83,12 @@ namespace Hibzz.DefineManager
 			var settings = DefineManagerSettings.GetOrCreateSettings();
 			settings.DefineRegistery = new List<DefineRegistrationData>();
 
-			var methods = GetMethodsWithRegisterDefines();
+			var methods = TypeCache.GetMethodsWithAttribute<RegisterDefineAttribute>();
 			foreach(var method in methods)
 			{
+				// The method can't be validated, so skip this iteration
+				if(!ValidateMethod(method)) { continue; }
+
 				// the method is guaranteed to not accept any parameters and
 				// to return DefineRegistrationData
 				var data = method.Invoke(null, null) as DefineRegistrationData;
@@ -146,91 +149,28 @@ namespace Hibzz.DefineManager
 			}
         }
 
-        // Returns a list of methods with the attribute "RegisterDefine" in it
-        private static List<MethodInfo> GetMethodsWithRegisterDefines()
-		{
-			// variable that will store a list of methods with the RegisterDefine attribute in it
-			List<MethodInfo> methods = new List<MethodInfo>();
-
-			// loop through all valid assemblies
-			var assemblies = GetValidAssemblies();
-			foreach (var assembly in assemblies)
-			{
-				// Get all types in the assembly and loop through them
-				var types = assembly.GetTypes();
-				foreach (var type in types)
-				{
-					// Get all private static methods in the type. This package
-					// will only support define registration via private static
-					// functions
-					var typeMethods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Static);
-					foreach (var method in typeMethods)
-					{
-						// Get all attributes and check for a match... if yes,
-						// add to the list and break
-						var attributes = method.GetCustomAttributes();
-						foreach (var attribute in attributes)
-						{
-							var registerDefineAttr = attribute as RegisterDefineAttribute;
-							if (registerDefineAttr != null)
-							{
-								// perform additional validation
-								if(ValidateMethod(method, type)) 
-								{ 
-									methods.Add(method); 
-								}
-
-								break;
-							}
-						}
-					}
-				}
-			}
-
-			return methods;
-		}
-
-		// Validate the method to retrn DefineRegistrationData and take no parameters
-		private static bool ValidateMethod(MethodInfo method, Type type)
+		/// <summary>
+		/// Validate the method to return DefineRegistrationData and take no parameters
+		/// </summary>
+		/// <param name="method">The method to check</param>
+		/// <returns>Is the given method valid?</returns>
+		private static bool ValidateMethod(MethodInfo method)
 		{
 			// Should return DefineRegistrationData
 			if (method.ReturnType != typeof(DefineRegistrationData))
 			{
-				Debug.LogError($"Method {method.Name} in {type} doesn't return DefineRegistrationData");
+				Debug.LogError($"Method {method.Name} in {method.DeclaringType} doesn't return DefineRegistrationData");
 				return false;
 			}
 
 			// Shouldn't accept any parameters
 			if (method.GetParameters().Length != 0)
 			{
-				Debug.LogError($"Method {method.Name} in {type} shouldn't accept any parameters");
+				Debug.LogError($"Method {method.Name} in {method.DeclaringType} shouldn't accept any parameters");
 				return false;
 			}
 
 			return true;
-		}
-
-		// Get all valid assemblies
-		private static List<Assembly> GetValidAssemblies()
-		{
-			var assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
-
-			// start by removing all assemblies that are default unity and .net modules
-			assemblies.RemoveAll((assembly) => assembly.GetName().Name.Contains("UnityEngine"));
-			assemblies.RemoveAll((assembly) => assembly.GetName().Name.Contains("UnityEditor"));
-			assemblies.RemoveAll((assembly) => assembly.GetName().Name.Contains("System"));
-			assemblies.RemoveAll((assembly) => assembly.GetName().Name.Contains("mscorlib"));
-			assemblies.RemoveAll((assembly) => assembly.GetName().Name.Contains("Mono.Security"));
-			assemblies.RemoveAll((assembly) => assembly.GetName().Name.Contains("Bee.BeeDriver"));
-
-			// Additionally remove all assemblies part of the ignore list
-			var settings = DefineManagerSettings.GetOrCreateSettings();
-			foreach (var ignoreElement in settings.IgnoreAssemblyList)
-			{
-				assemblies.RemoveAll((assembly) => assembly.GetName().Name.Equals(ignoreElement));
-			}
-
-			return assemblies;
 		}
 	}
 }
