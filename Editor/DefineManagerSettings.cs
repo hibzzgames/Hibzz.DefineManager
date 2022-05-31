@@ -13,7 +13,6 @@ namespace Hibzz.DefineManager
 		private const string defineSettingsPath = "ProjectSettings/DefineManagerSettings.asset";
 
 		[SerializeField] internal List<DefineRegistrationData> DefineRegistery;
-		[SerializeField] internal List<string> IgnoreAssemblyList;
 
 		internal CategoryCollapseInfo CollapseInfo;
 
@@ -23,7 +22,6 @@ namespace Hibzz.DefineManager
 		private DefineManagerSettings()
         {
 			DefineRegistery = new List<DefineRegistrationData>();
-			IgnoreAssemblyList = new List<string>();
 			CollapseInfo = new CategoryCollapseInfo();
         }
 
