@@ -1,8 +1,8 @@
+#if UNITY_EDITOR
+
 using UnityEngine;
 using UnityEditor;
-using System.Collections.Generic;
 
-#if UNITY_EDITOR
 namespace Hibzz.DefineManager
 {
 	internal class DefineManagerWindow : EditorWindow
@@ -79,7 +79,7 @@ namespace Hibzz.DefineManager
 		{
 			scrollpos = GUILayout.BeginScrollView(scrollpos, EditorStyleUtility.LeftTabStyle,
 							GUILayout.Height(position.height), GUILayout.Width(DefineListPaneWidth));
-            {
+			{
 				// variable used to track the last drawn category...
 				// This works because the system passes in define data sorted
 				// by category
@@ -174,7 +174,7 @@ namespace Hibzz.DefineManager
 			if(selectedData == null) { return; }
 
 			GUILayout.BeginVertical(EditorStyleUtility.RightTabStyle);
-            {
+			{
 				// Title + Define data
 				GUILayout.Label($"{selectedData.DisplayName}", EditorStyleUtility.TitleStyle);
 				GUILayout.Label($"Scripting Define: {selectedData.Define}");
@@ -216,7 +216,7 @@ namespace Hibzz.DefineManager
 			GUILayout.BeginHorizontal();
 			GUILayout.FlexibleSpace();
 
-            {
+			{
 				// pick the text based on if the data is installed or not
 				string buttonText = registrationData.IsInstalled ? "Remove" : "Install";
 
@@ -253,4 +253,5 @@ namespace Hibzz.DefineManager
 		#endif
 	}
 }
+
 #endif

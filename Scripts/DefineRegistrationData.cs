@@ -1,11 +1,9 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Hibzz.DefineManager
 {
-	[System.Serializable]
+	[Serializable]
 	public class DefineRegistrationData : IComparable<DefineRegistrationData>
 	{
 		#region public settable values
@@ -56,7 +54,7 @@ namespace Hibzz.DefineManager
 		/// Initialize the data
 		/// </summary>
 		internal void Initialize()
-        {
+		{
 			// if already initialize, skip the process
 			if(Initialized) { return; }
 
@@ -68,7 +66,7 @@ namespace Hibzz.DefineManager
 
 			// mark the data as initialized
 			Initialized = true;
-        }
+		}
 		#endif
 	}
 }

@@ -1,11 +1,10 @@
-using System;
+#if UNITY_EDITOR
+
 using System.Collections.Generic;
 using System.Reflection;
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-#if UNITY_EDITOR
 namespace Hibzz.DefineManager
 {
 	internal static class Manager
@@ -59,7 +58,7 @@ namespace Hibzz.DefineManager
 		/// Does it contain the requested define?
 		/// </summary>
 		internal static bool ContainDefine(string define)
-        {
+		{
 			// Get the define string from the player settings, which is a 
 			// semicolon seperated list of strings, and we split it
 			string definesString = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
@@ -121,7 +120,7 @@ namespace Hibzz.DefineManager
 		/// Refresh the collapsed category info
 		/// </summary>
 		private static void RefreshCollapsedCategoryInfo()
-        {
+		{
 			var settings = DefineManagerSettings.GetOrCreateSettings();
 			
 			var cacheData = settings.CollapseInfo.collapseData;
@@ -129,7 +128,7 @@ namespace Hibzz.DefineManager
 
 			string lastCategory = string.Empty;
 			foreach(var defineData in settings.DefineRegistery)
-            {
+			{
 				// skip if we've already processed the categorry
 				if(defineData.Category == lastCategory) { continue; }
 
@@ -137,9 +136,9 @@ namespace Hibzz.DefineManager
 				// collapsed or not, we use it during the refresh
 				bool collapsed = false;
 				if(cacheData.ContainsKey(defineData.Category))
-                {
+				{
 					collapsed = cacheData[defineData.Category];
-                }
+				}
 
 				// store the info to the new category info inside settings
 				settings.CollapseInfo.collapseData[defineData.Category] = collapsed;
@@ -147,7 +146,7 @@ namespace Hibzz.DefineManager
 				// update the last category flag
 				lastCategory = defineData.Category;
 			}
-        }
+		}
 
 		/// <summary>
 		/// Validate the method to return DefineRegistrationData and take no parameters
@@ -174,4 +173,5 @@ namespace Hibzz.DefineManager
 		}
 	}
 }
+
 #endif
