@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor;
-
 #if UNITY_EDITOR
+
+using UnityEngine;
+
 namespace Hibzz.DefineManager
 {
 	internal static class EditorStyleUtility
@@ -101,34 +99,35 @@ namespace Hibzz.DefineManager
 
 		private static GUIStyle _CategoryFontStyle;
 		internal static GUIStyle CategoryFontStyle
-        {
+		{
 			get
-            {
+			{
 				if(_CategoryFontStyle == null)
-                {
+				{
 					_CategoryFontStyle = new GUIStyle(GUI.skin.label); ;
 					_CategoryFontStyle.fontSize = 14;
-                }
+				}
 
 				return _CategoryFontStyle;
-            }
-        }
+			}
+		}
 
 		private static GUIStyle _TitleStyle;
 		internal static GUIStyle TitleStyle
-        {
+		{
 			get
-            {
+			{
 				if(_TitleStyle == null)
-                {
+				{
 					_TitleStyle = new GUIStyle(GUI.skin.label);
 					_TitleStyle.fontSize = 24;
 					_TitleStyle.fontStyle = FontStyle.Bold;
-                }
+				}
 
 				return _TitleStyle;
-            }
-        }
+			}
+		}
 	}
 }
+
 #endif
