@@ -7,7 +7,7 @@ namespace Hibzz.DefineManager
 {
 	internal class DefineManagerWindow : EditorWindow
 	{
-		[MenuItem("Window/Define Manager")]
+		[MenuItem("Hibzz/Define Manager")]
 		private static void ShowEditor()
 		{
 			// start by refreshing the data
